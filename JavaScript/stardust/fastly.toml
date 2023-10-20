@@ -11,9 +11,3 @@ service_id = ""
 [scripts]
   build = "npm run build"
   post_init = "npm install"
-
-[local_server]
-  [local_server.backends]
-    [local_server.backends.origin_0]
-      url = "httpz://green.fastlyforward.com.au"
-      override_host = "green.fastlyforward.com.au"
