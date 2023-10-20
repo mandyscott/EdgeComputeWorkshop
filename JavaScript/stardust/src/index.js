@@ -6,6 +6,9 @@ import { includeBytes } from "fastly:experimental";
 // File path is relative to root of project, not to this file
 const welcomePage = includeBytes("./src/welcome-to-compute@edge.html");
 
+// Define our backend
+const backend_0 = "origin_0";
+
 addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
 
 async function handleRequest(event) {
@@ -23,16 +26,16 @@ async function handleRequest(event) {
   }
 
   let url = new URL(req.url);
-
   // If request is to the `/` path...
-  if (url.pathname == "/") {
-
-    // Send a default synthetic response.
-    return new Response(welcomePage, {
-      status: 200,
-      headers: new Headers({ "Content-Type": "text/html; charset=utf-8" }),
+  //if ((url.pathname == "/") || (url.pathname == "/test.php")) {
+    // simply pass through the reqest to the backend server
+    // note: normally you should do some due diligence security and so on, rather than just a straight pass through
+    let resp = await fetch( req, {
+      backend: backend_0
     });
-  }
+
+    return resp;
+  //}
 
   // Catch all other requests and return a 404.
   return new Response("The page you requested could not be found", {

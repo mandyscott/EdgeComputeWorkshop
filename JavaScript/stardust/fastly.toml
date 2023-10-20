@@ -6,8 +6,24 @@ description = "Compute Workshop"
 language = "javascript"
 manifest_version = 3
 name = "stardust"
-service_id = ""
+service_id = "WHMKelxcIV8K8ZB9wYc4G1"
+
+[local_server]
+
+  [local_server.backends]
+
+    [local_server.backends.origin_0]
+      override_host = "green.fastlyforward.com.au"
+      url = "https://green.fastlyforward.com.au"
 
 [scripts]
   build = "npm run build"
   post_init = "npm install"
+
+[setup]
+
+  [setup.backends]
+
+    [setup.backends.origin_0]
+      address = "green.fastlyforward.com.au"
+      port = 443
