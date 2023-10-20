@@ -34,6 +34,8 @@ async function handleRequest(event) {
       backend: backend_0
     });
 
+    resp.headers.append("space-bunnies","are awesome");
+
     return resp;
   //}
 
