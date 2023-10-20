@@ -1,21 +1,10 @@
-//! Default Compute@Edge template program.
-
 /// <reference types="@fastly/js-compute" />
-// import { CacheOverride } from "fastly:cache-override";
-// import { Logger } from "fastly:logger";
 import { env } from "fastly:env";
 import { includeBytes } from "fastly:experimental";
 
 // Load a static file as a Uint8Array at compile time.
 // File path is relative to root of project, not to this file
 const welcomePage = includeBytes("./src/welcome-to-compute@edge.html");
-
-// The entry point for your application.
-//
-// Use this fetch event listener to define your main request handling logic. It could be
-// used to route based on the request properties (such as method or path), send
-// the request to a backend, make completely new requests, and/or generate
-// synthetic responses.
 
 addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
 
@@ -37,36 +26,6 @@ async function handleRequest(event) {
 
   // If request is to the `/` path...
   if (url.pathname == "/") {
-    // Below are some common patterns for Compute@Edge services using JavaScript.
-    // Head to https://developer.fastly.com/learning/compute/javascript/ to discover more.
-
-    // Create a new request.
-    // let bereq = new Request("http://example.com");
-
-    // Add request headers.
-    // req.headers.set("X-Custom-Header", "Welcome to Compute@Edge!");
-    // req.headers.set(
-    //   "X-Another-Custom-Header",
-    //   "Recommended reading: https://developer.fastly.com/learning/compute"
-    // );
-
-    // Create a cache override.
-    // To use this, uncomment the import statement at the top of this file for CacheOverride.
-    // let cacheOverride = new CacheOverride("override", { ttl: 60 });
-
-    // Forward the request to a backend.
-    // let beresp = await fetch(req, {
-    //   backend: "backend_name",
-    //   cacheOverride,
-    // });
-
-    // Remove response headers.
-    // beresp.headers.delete("X-Another-Custom-Header");
-
-    // Log to a Fastly endpoint.
-    // To use this, uncomment the import statement at the top of this file for Logger.
-    // const logger = new Logger("my_endpoint");
-    // logger.log("Hello from the edge!");
 
     // Send a default synthetic response.
     return new Response(welcomePage, {
