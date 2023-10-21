@@ -1,4 +1,5 @@
 /// <reference types="@fastly/js-compute" />
+import { CacheOverride } from "fastly:cache-override";
 import { env } from "fastly:env";
 import { includeBytes } from "fastly:experimental";
 
@@ -25,13 +26,17 @@ async function handleRequest(event) {
     });
   }
 
+  // Create a cache override.
+  let cacheOverride = new CacheOverride("override", { ttl: 60 });
+
   let url = new URL(req.url);
   // If request is to the `/` path...
   //if ((url.pathname == "/") || (url.pathname == "/test.php")) {
     // simply pass through the reqest to the backend server
     // note: normally you should do some due diligence security and so on, rather than just a straight pass through
     let resp = await fetch( req, {
-      backend: backend_0
+      backend: backend_0,
+      cacheOverride
     });
 
     resp.headers.append("space-bunnies","are awesome");
