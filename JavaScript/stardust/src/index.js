@@ -14,8 +14,9 @@ const backends = ["origin_0", "origin_1"];
 addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
 
 async function handleRequest(event) {
+  const ver = env('FASTLY_SERVICE_VERSION') || 'local';
   // Log service version
-  console.log("FASTLY_SERVICE_VERSION:", env('FASTLY_SERVICE_VERSION') || 'local');
+  console.log("FASTLY_SERVICE_VERSION:", ver);
   
   // Get the client request.
   let req = event.request;
@@ -49,10 +50,12 @@ async function handleRequest(event) {
 
     // set a custom header
     resp.headers.append("space-bunnies","are awesome");
+    // add the service version for ease of reference
+    resp.headers.append("x-service-version",ver);
 
     console.log("## Previous Cache-Control header: " + resp.headers.get("cache-control"));
     // More cache settings: cache in Fastly but not browsers
-// Note: this would need to go back through a Fastly VCL service currently in order to apply the new cache settings at the edge service
+    // Note: this would need to go back through a Fastly VCL service currently in order to apply the new cache settings at the edge service
     resp.headers.set("cache-control","private, no-store");
     console.log("## Updated Cache-Control header: " + resp.headers.get("cache-control"));
   
