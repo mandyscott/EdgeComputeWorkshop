@@ -44,8 +44,9 @@ async function handleRequest(event) {
       cacheOverride
     });
 
+    // set a custom header
     resp.headers.append("space-bunnies","are awesome");
-
+  
     return resp;
   //}
 
