@@ -46,6 +46,11 @@ async function handleRequest(event) {
 
     // set a custom header
     resp.headers.append("space-bunnies","are awesome");
+
+    console.log("## Previous Cache-Control header: " + resp.headers.get("cache-control"));
+    // More cache settings: cache in Fastly but not browsers
+    resp.headers.set("cache-control","private, no-store");
+    console.log("## Updated Cache-Control header: " + resp.headers.get("cache-control"));
   
     return resp;
   //}
