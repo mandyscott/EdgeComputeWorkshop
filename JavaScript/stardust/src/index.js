@@ -28,7 +28,10 @@ async function handleRequest(event) {
   }
 
   // Create a cache override.
-  let cacheOverride = new CacheOverride("override", { ttl: 60 });
+  let cacheOverride = new CacheOverride("override", { 
+    surrogateKey: "all",
+    ttl: 60 
+  });
 
   // Load balancing: pick a backend at random
   let activeBackend = backends[Math.floor(Math.random() * backends.length)];
