@@ -52,6 +52,7 @@ async function handleRequest(event) {
 
     console.log("## Previous Cache-Control header: " + resp.headers.get("cache-control"));
     // More cache settings: cache in Fastly but not browsers
+// Note: this would need to go back through a Fastly VCL service currently in order to apply the new cache settings at the edge service
     resp.headers.set("cache-control","private, no-store");
     console.log("## Updated Cache-Control header: " + resp.headers.get("cache-control"));
   
