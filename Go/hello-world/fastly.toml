@@ -1,0 +1,12 @@
+# This file describes a Fastly Compute@Edge package. To learn more visit:
+# https://developer.fastly.com/reference/fastly-toml/
+
+authors = ["mandy@fastly.com"]
+description = "Hello World!"
+language = "go"
+manifest_version = 3
+name = "hello-world"
+service_id = ""
+
+[scripts]
+  build = "go build -o bin/main.wasm ."
