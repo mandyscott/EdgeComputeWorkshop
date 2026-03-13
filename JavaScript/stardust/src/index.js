@@ -1,4 +1,5 @@
 /// <reference types="@fastly/js-compute" />
+import { CacheOverride } from "fastly:cache-override";
 import { env } from "fastly:env";
 import { includeBytes } from "fastly:experimental";
 
@@ -6,14 +7,16 @@ import { includeBytes } from "fastly:experimental";
 // File path is relative to root of project, not to this file
 const welcomePage = includeBytes("./src/welcome-to-compute@edge.html");
 
-// Define our backend
-const backend_0 = "origin_0";
+// Specify the available backends in an Array for ease of use later
+// these should match the origins defined in your service (and toml for any locally defined backends)
+const backends = ["origin_0", "origin_1"];
 
 addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
 
 async function handleRequest(event) {
+  const ver = env('FASTLY_SERVICE_VERSION') || 'local';
   // Log service version
-  console.log("FASTLY_SERVICE_VERSION:", env('FASTLY_SERVICE_VERSION') || 'local');
+  console.log("FASTLY_SERVICE_VERSION:", ver);
   
   // Get the client request.
   let req = event.request;
@@ -25,17 +28,37 @@ async function handleRequest(event) {
     });
   }
 
+  // Create a cache override.
+  let cacheOverride = new CacheOverride("override", { 
+    surrogateKey: "all",
+    ttl: 60 
+  });
+
+  // Load balancing: pick a backend at random
+  let activeBackend = backends[Math.floor(Math.random() * backends.length)];
+  console.log("## Active backend is: " + activeBackend);
+ 
   let url = new URL(req.url);
   // If request is to the `/` path...
   //if ((url.pathname == "/") || (url.pathname == "/test.php")) {
     // simply pass through the reqest to the backend server
     // note: normally you should do some due diligence security and so on, rather than just a straight pass through
     let resp = await fetch( req, {
-      backend: backend_0
+      backend: activeBackend,
+      cacheOverride
     });
 
+    // set a custom header
     resp.headers.append("space-bunnies","are awesome");
+    // add the service version for ease of reference
+    resp.headers.append("x-service-version",ver);
 
+    console.log("## Previous Cache-Control header: " + resp.headers.get("cache-control"));
+    // More cache settings: cache in Fastly but not browsers
+    // Note: this would need to go back through a Fastly VCL service currently in order to apply the new cache settings at the edge service
+    resp.headers.set("cache-control","private, no-store");
+    console.log("## Updated Cache-Control header: " + resp.headers.get("cache-control"));
+  
     return resp;
   //}
 

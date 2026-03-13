@@ -1,0 +1,9 @@
+# This file describes a Fastly Compute@Edge package. To learn more visit:
+# https://developer.fastly.com/reference/fastly-toml/
+
+authors = ["mandy@fastly.com"]
+description = "A space themed workshop in Rust."
+language = "rust"
+manifest_version = 3
+name = "stardust"
+service_id = ""
